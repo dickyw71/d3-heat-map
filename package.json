@@ -1,0 +1,27 @@
+{
+  "name": "d3-heat-map",
+  "version": "1.0.0",
+  "description": "D3 visualization of temperature variance over time.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dickyw71/d3-heat-map.git"
+  },
+  "keywords": [
+    "D3",
+    "freeCodeCamp"
+  ],
+  "author": "Richard Wheatley",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dickyw71/d3-heat-map/issues"
+  },
+  "homepage": "https://github.com/dickyw71/d3-heat-map#readme",
+  "devDependencies": {
+    "browser-sync": "^2.23.6",
+    "gulp": "^3.9.1"
+  }
+}
