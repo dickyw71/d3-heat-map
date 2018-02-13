@@ -11,7 +11,8 @@ let x = d3.scaleTime()
   .range([0, width]);
 
 // y scale - time, months Jan-Dec
-var y = d3.scaleOrdinal(months);
+var y = d3.scaleOrdinal(months)
+  .range([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
 
 // Axis
 var xAxis = d3.axisBottom(x)
@@ -34,3 +35,13 @@ svg.append("g")
 svg.append("g")
   .attr("class", "y axis")
   .call(yAxis);
+
+d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/global-temperature.json", function(error, data) {
+  if (error) throw error;
+
+  console.log(data);
+
+  y.domain([d3.map(data.monthlyVariance, function(d) { return d.month; }), 1]);
+
+});
+ 
