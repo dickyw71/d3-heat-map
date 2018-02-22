@@ -1,32 +1,39 @@
 //  setup SVG with width and height based on viewport 
 let margin = 20,
-    width = parseInt(d3.select(".svg-container").style("width")),
-    height = parseInt(d3.select(".svg-container").style("height"));
+    width = parseInt(d3.select(".svg-container").style("width")) - margin*4,
+    height = parseInt(d3.select(".svg-container").style("height")) - margin*2;
 
 let months = ["January", "February", "March", "April", "May", "June", 
               "July", "August", "September", "October", "November", "December" ];
 
-// x scale - time , years 
+let parseYear = d3.timeParse("%Y");
+let parseMonth = d3.timeParse("%m");
+
+// x scale - years 
 let x = d3.scaleTime()
   .range([0, width]);
 
 // y scale - months Jan-Dec
-var y = d3.scaleOrdinal(months)
-  .range([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+var y = d3.scaleTime([parseMonth("Jan"), parseMonth("Dec")])
+  .range([height, 0]);
 
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 
 // Axis
 var xAxis = d3.axisBottom(x)
+  .tickFormat(d3.timeFormat("%Y"))
+  // .ticks(d3.timeYears(parseYear(1753), parseYear(2015)));
 
-var yAxis = d3.axisLeft(y);
+var yAxis = d3.axisLeft(y)
+  .tickFormat(d3.timeFormat("%m"))
+//  .ticks(d3.timeMonths(parseMonth(0), parseMonth(11)));
 
 var svg = d3.select(".heat-map")
-    .attr("width", width + margin*2 )
+    .attr("width", width + margin*4 )
     .attr("height", height + margin*2 )
     .attr("class", "heat-map")
   .append("g")
-    .attr("transform", "translate(" + margin + "," + margin + ")");
+    .attr("transform", "translate(" + margin*2 + "," + margin + ")");
   // .call(tip);
 
 svg.append("g")
@@ -42,9 +49,16 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
   if (error) throw error;
 
   console.log(data);
-
-  // x.domain([d3.filter()])
-  // y.domain([d3.map(data.monthlyVariance, function(d) { return d.month; }), 1]);
+  
+  first = data.monthlyVariance[0];
+  last = data.monthlyVariance[data.monthlyVariance.length-1];
+  console.log(first, last);
+ 
+  x.domain([parseYear(first.year), parseYear(last.year)])
+  // x.domain([new Date(first.year, first.month-1, 1), new Date (last.year, last.month-1, 1)])
+  y.domain([1, 12]);
+  console.log(x.domain(), y.domain())
+  console.log(x(data.monthlyVariance[100].year), y(data.monthlyVariance[100].month));
 
   svg.selectAll(".slice")
       .data(data)
@@ -53,7 +67,7 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
       .attr("width", 5)
       .attr("height", height/12)
       .attr("x", function(d) { console.log(x(d.monthlyVariance.year)); return x(d.monthlyVariance.year); })
-      .attr("y", function(d) { console.log(y(d.monthlyVariance.month)); return y(d.appendmonthlyVariance.month); })
+      .attr("y", function(d) { console.log(y(d.monthlyVariance.month)); return y(d.appendmonthlyVariance.month-1); })
       .style("fill", function(d) { color(d.baseTemperature + d.monthlyVariance.variance); return color(d.baseTemperature + d.monthlyVariance.variance); });
     // .on("mouseover", function(d, i) {
     //   tip.show(d, svg)
