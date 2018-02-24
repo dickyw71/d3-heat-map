@@ -52,26 +52,27 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
   
   first = data.monthlyVariance[0];
   last = data.monthlyVariance[data.monthlyVariance.length-1];
-  console.log(first, last);
  
   x.domain([parseYear(first.year), parseYear(last.year)])
-  // x.domain([new Date(first.year, first.month-1, 1), new Date (last.year, last.month-1, 1)])
   y.domain([1, 12]);
-  console.log(x.domain(), y.domain())
-  console.log(x(data.monthlyVariance[100].year), y(data.monthlyVariance[100].month));
 
-  svg.selectAll(".slice")
-      .data(data)
-    .enter().append("rect")
-      .attr("class", "slice")
-      .attr("width", 5)
-      .attr("height", height/12)
-      .attr("x", function(d) { console.log(x(d.monthlyVariance.year)); return x(d.monthlyVariance.year); })
-      .attr("y", function(d) { console.log(y(d.monthlyVariance.month)); return y(d.appendmonthlyVariance.month-1); })
-      .style("fill", function(d) { color(d.baseTemperature + d.monthlyVariance.variance); return color(d.baseTemperature + d.monthlyVariance.variance); });
-    // .on("mouseover", function(d, i) {
-    //   tip.show(d, svg)
-    //   })
-    // .on("mouseout", tip.hide);
+  d3.select("body")
+    .style("background-color", "cyan");
+
+  let stripeWidth = x.range()[1] / data.monthlyVariance.length;
+  let stripHeight = y.range()[0] / 12;
+
+  let myData = data.monthlyVariance;
+
+  svg.selectAll(".stripe")
+    .data(myData)
+  .enter().append("rect")
+        .attr("class", "stripe")
+        .attr("width", stripeWidth*10)
+        .attr("height", 20 )
+        .attr("x", (d, i) => x(parseYear(d.year)))
+        .attr("y", (d, i) => y(d.month-1))
+        // .style("fill", "red");
+        .style("fill", (d) =>  color(data.baseTemperature + d.variance));
 });
  
