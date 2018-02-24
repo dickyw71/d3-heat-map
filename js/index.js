@@ -60,7 +60,7 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
     .style("background-color", "cyan");
 
   let stripeWidth = x.range()[1] / data.monthlyVariance.length;
-  let stripHeight = y.range()[0] / 12;
+  let stripeHeight = y.range()[0] / 12;
 
   let myData = data.monthlyVariance;
 
@@ -69,10 +69,9 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
   .enter().append("rect")
         .attr("class", "stripe")
         .attr("width", stripeWidth*10)
-        .attr("height", 20 )
+        .attr("height", stripeHeight )
         .attr("x", (d, i) => x(parseYear(d.year)))
         .attr("y", (d, i) => y(d.month-1))
-        // .style("fill", "red");
         .style("fill", (d) =>  color(data.baseTemperature + d.variance));
 });
  
