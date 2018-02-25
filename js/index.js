@@ -3,21 +3,23 @@ let margin = 20,
     width = parseInt(d3.select(".svg-container").style("width")) - margin*4,
     height = parseInt(d3.select(".svg-container").style("height")) - margin*2;
 
-let months = ["January", "February", "March", "April", "May", "June", 
-              "July", "August", "September", "October", "November", "December" ];
-
 let parseYear = d3.timeParse("%Y");
-let parseMonth = d3.timeParse("%m");
+let parseMonth = d3.timeParse("%m"); 
+
+let months = ["January", "February", "March", 
+              "April", "May", "June", 
+              "July", "August", "September", 
+              "October", "November", "December"];
 
 // x scale - years 
 let x = d3.scaleTime()
   .range([0, width]);
 
 // y scale - months Jan-Dec
-var y = d3.scaleTime([parseMonth("Jan"), parseMonth("Dec")])
+var y = d3.scaleTime(months)
   .range([height, 0]);
 
-var color = d3.scaleOrdinal(d3.schemeCategory10);
+var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 // Axis
 var xAxis = d3.axisBottom(x)
@@ -26,7 +28,7 @@ var xAxis = d3.axisBottom(x)
 
 var yAxis = d3.axisLeft(y)
   .tickFormat(d3.timeFormat("%m"))
-//  .ticks(d3.timeMonths(parseMonth(0), parseMonth(11)));
+  .ticks(12);
 
 var svg = d3.select(".heat-map")
     .attr("width", width + margin*4 )
@@ -54,7 +56,7 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
   last = data.monthlyVariance[data.monthlyVariance.length-1];
  
   x.domain([parseYear(first.year), parseYear(last.year)])
-  y.domain([1, 12]);
+  y.domain([12, 1]);
 
   d3.select("body")
     .style("background-color", "cyan");
@@ -64,14 +66,16 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
 
   let myData = data.monthlyVariance;
 
+  console.log(months);
+
   svg.selectAll(".stripe")
     .data(myData)
   .enter().append("rect")
         .attr("class", "stripe")
-        .attr("width", stripeWidth*10)
-        .attr("height", stripeHeight )
+        .attr("width", stripeWidth*20)
+        .attr("height", stripeHeight)
         .attr("x", (d, i) => x(parseYear(d.year)))
-        .attr("y", (d, i) => y(d.month-1))
+        .attr("y", (d, i) => y(d.month))
         .style("fill", (d) =>  color(data.baseTemperature + d.variance));
 });
  
