@@ -24,18 +24,18 @@ var color = d3.scaleOrdinal(d3.schemeCategory20);
 // Axis
 var xAxis = d3.axisBottom(x)
   .tickFormat(d3.timeFormat("%Y"))
-  // .ticks(d3.timeYears(parseYear(1753), parseYear(2015)));
+  .ticks(50);
 
 var yAxis = d3.axisLeft(y)
-  .tickFormat(d3.timeFormat("%m"))
+  .tickFormat(d3.timeFormat("%B"))
   .ticks(12);
 
 var svg = d3.select(".heat-map")
-    .attr("width", width + margin*4 )
+    .attr("width", width + margin*2 )
     .attr("height", height + margin*2 )
     .attr("class", "heat-map")
   .append("g")
-    .attr("transform", "translate(" + margin*2 + "," + margin + ")");
+    .attr("transform", "translate(" + margin*3 + "," + margin + ")");
   // .call(tip);
 
 svg.append("g")
@@ -58,7 +58,8 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
   x.domain([parseYear(first.year), parseYear(last.year)])
   y.domain([12, 1]);
 
-  d3.select("body")
+  d3.select("body").transition()
+    .duration(1000)
     .style("background-color", "cyan");
 
   let stripeWidth = x.range()[1] / data.monthlyVariance.length;
