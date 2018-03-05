@@ -1,3 +1,21 @@
+
+body {
+    display: block;
+    /* overflow: hidden; */
+}
 .svg-container {
     height: 70vh;
+    /* font-size: 0; */
+}
+
+.heat-map {
+    line-height: 0px;
+}
+
+.stripe {
+    display: inline-block;
+}
+
+.label {
+    font-size: 18px;
 }
