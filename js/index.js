@@ -4,48 +4,60 @@ let margin = 20,
     height = parseInt(d3.select(".svg-container").style("height")) - margin*2;
 
 let parseYear = d3.timeParse("%Y");
-let parseMonth = d3.timeParse("%m"); 
-
-let months = ["January", "February", "March", 
-              "April", "May", "June", 
-              "July", "August", "September", 
-              "October", "November", "December"];
+let parseMonth = d3.timeParse("%B"); 
 
 // x scale - years 
 let x = d3.scaleTime()
   .range([0, width]);
 
 // y scale - months Jan-Dec
-var y = d3.scaleTime(months)
+var y = d3.scaleTime()
   .range([height, 0]);
 
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 // Axis
 var xAxis = d3.axisBottom(x)
-  .tickFormat(d3.timeFormat("%Y"))
-  .ticks(50);
+.tickArguments([d3.timeYear.every(10)])
+// .tickFormat(d3.timeFormat("%Y"))
+//   .ticks(50);
 
 var yAxis = d3.axisLeft(y)
-  .tickFormat(d3.timeFormat("%B"))
-  .ticks(12);
+  .tickSize([0])
+  .tickFormat(d3.timeFormat("%B"));
+  // .ticks(12);
 
 var svg = d3.select(".heat-map")
     .attr("width", width + margin*2 )
     .attr("height", height + margin*2 )
     .attr("class", "heat-map")
-  .append("g")
+  .append("g") 
     .attr("transform", "translate(" + margin*3 + "," + margin + ")");
   // .call(tip);
 
 svg.append("g")
    .attr("class", "x axis")
    .attr("transform", "translate(0," + height + ")")
-   .call(xAxis);
+   .call(xAxis)
+   .append("text")
+    .attr("class", "x label")
+    .attr("x", width/2)
+    .attr("y", 36)
+    .attr("fill", "black")
+    .style("text-anchor", "middle")
+    .text("Year");
 
 svg.append("g")
   .attr("class", "y axis")
-  .call(yAxis);
+  .call(yAxis)
+  .append("text")
+    .attr("class", "y label")
+    .attr("transform", "translate(0, " + height/2 + ") rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", "-2.8em")
+    .attr("fill", "black")
+    .style("text-anchor", "middle")
+    .text("Month")
 
 d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/global-temperature.json", function(error, data) {
   if (error) throw error;
@@ -67,16 +79,15 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
 
   let myData = data.monthlyVariance;
 
-  console.log(months);
-
   svg.selectAll(".stripe")
     .data(myData)
   .enter().append("rect")
         .attr("class", "stripe")
-        .attr("width", stripeWidth*20)
-        .attr("height", stripeHeight)
+        .attr("width", stripeWidth*12)
+        .attr("height", stripeHeight+2)
         .attr("x", (d, i) => x(parseYear(d.year)))
         .attr("y", (d, i) => y(d.month))
+        .attr("id", (d) => d.month + "_" + d.year)
         .style("fill", (d) =>  color(data.baseTemperature + d.variance));
 });
  
