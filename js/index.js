@@ -14,7 +14,7 @@ let x = d3.scaleTime()
 var y = d3.scaleTime()
   .range([height, 0]);
 
-var color = d3.scaleOrdinal(d3.schemeCategory20);
+var color = d3.scaleSequential(d3.interpolateRainbow);
 
 // Axis
 var xAxis = d3.axisBottom(x)
@@ -62,13 +62,19 @@ svg.append("g")
 d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/global-temperature.json", function(error, data) {
   if (error) throw error;
 
+  let myData = data.monthlyVariance;
   console.log(data);
   
-  first = data.monthlyVariance[0];
-  last = data.monthlyVariance[data.monthlyVariance.length-1];
- 
+  let first = data.monthlyVariance[0];
+  let last = data.monthlyVariance[data.monthlyVariance.length-1];
+  let minTemp = d3.min(myData, (d) => data.baseTemperature + d.variance );
+  let maxTemp = d3.max(myData, (d) => data.baseTemperature + d.variance );
+
+  console.log(minTemp, maxTemp);
+
   x.domain([parseYear(first.year), parseYear(last.year)])
   y.domain([12, 1]);
+  color.domain([maxTemp, minTemp]);
 
   d3.select("body").transition()
     .duration(1000)
@@ -76,8 +82,6 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
 
   let stripeWidth = x.range()[1] / data.monthlyVariance.length;
   let stripeHeight = y.range()[0] / 12;
-
-  let myData = data.monthlyVariance;
 
   svg.selectAll(".stripe")
     .data(myData)
