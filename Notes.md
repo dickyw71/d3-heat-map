@@ -5,6 +5,6 @@
 
 - Treat X scale as linear not time.
 
-- Choose better colour scale
-- Calculate temperature delta
+- ~~Choose better colour scale~~
+- ~~Calculate temperature delta~~
 - Tool-tip with Month name, year, temp (base + variance) and temp delta

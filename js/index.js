@@ -6,6 +6,12 @@ let margin = 20,
 let parseYear = d3.timeParse("%Y");
 let parseMonth = d3.timeParse("%B"); 
 
+let stripeTip = d3.tip()
+    .attr("class", "d3-tip")
+    .html(function(d) { return "<span>" + parseMonth(d.month) + " </span>" + "<span>" + parseYear(d.year) + "</span>"
+                            + "<br/><span>" + 10 + d.variance + "</span>"
+                            + "<br/><span>" + d.variance + "</span>"; })
+
 // x scale - years 
 let x = d3.scaleTime()
   .range([0, width]);
@@ -32,8 +38,8 @@ var svg = d3.select(".heat-map")
     .attr("height", height + margin*2 )
     .attr("class", "heat-map")
   .append("g") 
-    .attr("transform", "translate(" + margin*3 + "," + margin + ")");
-  // .call(tip);
+    .attr("transform", "translate(" + margin*3 + "," + margin + ")")
+  .call(stripeTip);
 
 svg.append("g")
    .attr("class", "x axis")
@@ -92,6 +98,10 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
         .attr("x", (d, i) => x(parseYear(d.year)))
         .attr("y", (d, i) => y(d.month))
         .attr("id", (d) => d.month + "_" + d.year)
-        .style("fill", (d) =>  color(data.baseTemperature + d.variance));
+        .style("fill", (d) =>  color(data.baseTemperature + d.variance))
+    .on("mouseover", function(d, i) {
+          stripeTip.show(d, svg)
+       })
+    .on("mouseout", stripeTip.hide);
 });
  
