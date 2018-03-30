@@ -6,11 +6,16 @@ let margin = 20,
 let parseYear = d3.timeParse("%Y");
 let parseMonth = d3.timeParse("%B"); 
 
+let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+let baselineTemp = 15;
+
+
 let stripeTip = d3.tip()
     .attr("class", "d3-tip")
-    .html(function(d) { return "<span>" + parseMonth(d.month) + " </span>" + "<span>" + parseYear(d.year) + "</span>"
-                            + "<br/><span>" + 10 + d.variance + "</span>"
-                            + "<br/><span>" + d.variance + "</span>"; })
+    .html(function(d) { return "<span>" + months[d.month-1] + " </span>" + "<span> - " + d.year + "</span>"
+                            + "<br/><span>" + (baselineTemp + d.variance).toPrecision(2) + " ℃</span>"
+                            + "<br/><span>" + d.variance.toPrecision(2) + " ℃</span>"; })
 
 // x scale - years 
 let x = d3.scaleTime()
@@ -28,10 +33,6 @@ var xAxis = d3.axisBottom(x)
 // .tickFormat(d3.timeFormat("%Y"))
 //   .ticks(50);
 
-var yAxis = d3.axisLeft(y)
-  // .tickSize([0])
-  // .tickFormat(d3.timeFormat("%B"));
-  .ticks(12);
 
 var svg = d3.select(".heat-map")
     .attr("width", width + margin*2 )
@@ -55,7 +56,7 @@ svg.append("g")
 
 svg.append("g")
   .attr("class", "y axis")
-  .call(yAxis)
+  // .call(yAxis)
   .append("text")
     .attr("class", "y label")
     .attr("transform", "translate(0, " + height/2 + ") rotate(-90)")
@@ -68,18 +69,21 @@ svg.append("g")
     console.log("Height: ", height/12);
 
 svg.selectAll(".y-label")
-  .data(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
+  .data(months)
 .enter().append("text")
   .attr("class", "y-label")
   .attr("transform", (d, i) => "translate(0, " + ((height/12)*(i+1)) + ")")
-  .attr("dx", "-2em")  
+  .attr("dx", "-0.5em")  
   .attr("dy", "-1.3em")
   .attr("fill", "black")
+  .style("text-anchor", "end")
   .text(d => d)
 
 
 d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/global-temperature.json", function(error, data) {
   if (error) throw error;
+
+  baselineTemp = data.baseTemperature;
 
   let myData = data.monthlyVariance;
   console.log(data);
@@ -108,8 +112,9 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
         .attr("class", "stripe")
         .attr("width", stripeWidth*12)
         .attr("height", stripeHeight+2)
-        .attr("x", (d, i) => x(parseYear(d.year)))
-        .attr("y", (d, i) => y(d.month))
+        .attr("transform", (d) => "translate("+ x(parseYear(d.year)) + ", " + y(d.month) + ")")
+        // .attr("x", (d, i) => x(parseYear(d.year)))
+        // .attr("y", (d, i) => y(d.month))
         .attr("id", (d) => d.month + "_" + d.year)
         .style("fill", (d) =>  color(data.baseTemperature + d.variance))
     .on("mouseover", function(d, i) {
