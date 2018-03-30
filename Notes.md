@@ -8,3 +8,6 @@
 - ~~Choose better colour scale~~
 - ~~Calculate temperature delta~~
 - Tool-tip with Month name, year, temp (base + variance) and temp delta
+
+divide y axis height by 12 (each month) + offset half month height to centre text
+append text for each month to left of y axis  

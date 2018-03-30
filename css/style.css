@@ -33,3 +33,8 @@ p {
 .label {
     font-size: 18px;
 }
+
+.d3-tip {
+    border-radius: 5px;
+    background-color: bisque;
+}

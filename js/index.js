@@ -29,9 +29,9 @@ var xAxis = d3.axisBottom(x)
 //   .ticks(50);
 
 var yAxis = d3.axisLeft(y)
-  .tickSize([0])
-  .tickFormat(d3.timeFormat("%B"));
-  // .ticks(12);
+  // .tickSize([0])
+  // .tickFormat(d3.timeFormat("%B"));
+  .ticks(12);
 
 var svg = d3.select(".heat-map")
     .attr("width", width + margin*2 )
@@ -64,6 +64,19 @@ svg.append("g")
     .attr("fill", "black")
     .style("text-anchor", "middle")
     .text("Month")
+
+    console.log("Height: ", height/12);
+
+svg.selectAll(".y-label")
+  .data(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
+.enter().append("text")
+  .attr("class", "y-label")
+  .attr("transform", (d, i) => "translate(0, " + ((height/12)*(i+1)) + ")")
+  .attr("dx", "-2em")  
+  .attr("dy", "-1.3em")
+  .attr("fill", "black")
+  .text(d => d)
+
 
 d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/global-temperature.json", function(error, data) {
   if (error) throw error;
