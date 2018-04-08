@@ -1,7 +1,7 @@
 //  setup SVG with width and height based on viewport 
 let margin = 20,
-    width = parseInt(d3.select(".svg-container").style("width")) - margin*4,
-    height = parseInt(d3.select(".svg-container").style("height")) - margin*2;
+    width = 1200 - margin*4,
+    height = 600 - margin*2;
 
 let parseYear = d3.timeParse("%Y");
 let parseMonth = d3.timeParse("%B"); 
@@ -29,30 +29,16 @@ var color = d3.scaleSequential(d3.interpolateRainbow);
 
 // Axis
 var xAxis = d3.axisBottom(x)
-.tickArguments([d3.timeYear.every(10)])
-// .tickFormat(d3.timeFormat("%Y"))
-//   .ticks(50);
-
+  .tickSizeOuter(10)
+  .ticks(20)
 
 var svg = d3.select(".heat-map")
     .attr("width", width + margin*2 )
-    .attr("height", height + margin*2 )
+    .attr("height", height + margin*8 )
     .attr("class", "heat-map")
   .append("g") 
-    .attr("transform", "translate(" + margin*3 + "," + margin + ")")
+    .attr("transform", "translate(" + margin*3 + "," + margin*2 + ")")
   .call(stripeTip);
-
-svg.append("g")
-   .attr("class", "x axis")
-   .attr("transform", "translate(0," + height + ")")
-   .call(xAxis)
-   .append("text")
-    .attr("class", "x label")
-    .attr("x", width/2)
-    .attr("y", 36)
-    .attr("fill", "black")
-    .style("text-anchor", "middle")
-    .text("Year");
 
 svg.append("g")
   .attr("class", "y axis")
@@ -86,31 +72,38 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
   baselineTemp = data.baseTemperature;
 
   let myData = data.monthlyVariance;
-  console.log(data);
   
   let first = data.monthlyVariance[0];
   let last = data.monthlyVariance[data.monthlyVariance.length-1];
   let minTemp = d3.min(myData, (d) => data.baseTemperature + d.variance );
   let maxTemp = d3.max(myData, (d) => data.baseTemperature + d.variance );
 
-  console.log(minTemp, maxTemp);
-
-  x.domain([parseYear(first.year), parseYear(last.year)])
+  x.domain([new Date(first.year, first.month, 1), new Date(last.year, last.month, 1)])
   y.domain([12, 1]);
   color.domain([maxTemp, minTemp]);
 
-  d3.select("body").transition()
-    .duration(1000)
-    .style("background-color", "cyan");
+  console.log("X Domain:", x.domain());
 
   let stripeWidth = x.range()[1] / data.monthlyVariance.length;
   let stripeHeight = y.range()[0] / 12;
+
+  svg.append("g")
+   .attr("class", "x axis")
+   .attr("transform", "translate(0," + height + ")")
+   .call(xAxis)
+   .append("text")
+    .attr("class", "x label")
+    .attr("x", width/2)
+    .attr("y", 36)
+    .attr("fill", "black")
+    .style("text-anchor", "middle")
+    .text("Year");
 
   svg.selectAll(".stripe")
     .data(myData)
   .enter().append("rect")
         .attr("class", "stripe")
-        .attr("width", stripeWidth*12)
+        .attr("width", stripeWidth+2)
         .attr("height", stripeHeight+2)
         .attr("transform", (d) => "translate("+ x(parseYear(d.year)) + ", " + y(d.month) + ")")
         // .attr("x", (d, i) => x(parseYear(d.year)))
