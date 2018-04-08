@@ -42,7 +42,6 @@ var svg = d3.select(".heat-map")
 
 svg.append("g")
   .attr("class", "y axis")
-  // .call(yAxis)
   .append("text")
     .attr("class", "y label")
     .attr("transform", "translate(0, " + height/2 + ") rotate(-90)")
