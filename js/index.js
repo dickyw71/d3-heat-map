@@ -81,8 +81,6 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
   y.domain([12, 1]);
   color.domain([maxTemp, minTemp]);
 
-  console.log("X Domain:", x.domain());
-
   let stripeWidth = x.range()[1] / data.monthlyVariance.length;
   let stripeHeight = y.range()[0] / 12;
 
@@ -102,11 +100,9 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
     .data(myData)
   .enter().append("rect")
         .attr("class", "stripe")
-        .attr("width", stripeWidth+2)
-        .attr("height", stripeHeight+2)
-        .attr("transform", (d) => "translate("+ x(parseYear(d.year)) + ", " + y(d.month) + ")")
-        // .attr("x", (d, i) => x(parseYear(d.year)))
-        // .attr("y", (d, i) => y(d.month))
+        .attr("width", stripeWidth+3)
+        .attr("height", stripeHeight)
+        .attr("transform", (d) => "translate("+ x(parseYear(d.year)) + ", " + ((d.month-1)*stripeHeight) + ")")
         .attr("id", (d) => d.month + "_" + d.year)
         .style("fill", (d) =>  color(data.baseTemperature + d.variance))
     .on("mouseover", function(d, i) {
