@@ -20,6 +20,7 @@ svg {
 }
 
 .d3-tip {
+    padding: 10px;
     border-radius: 5px;
     background-color: bisque;
     text-align: center;
