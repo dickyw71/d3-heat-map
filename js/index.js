@@ -1,7 +1,7 @@
 //  setup SVG with width and height based on viewport 
-let margin = 60,
-    width = 1100 - margin*2,
-    height = 600 - margin*2;
+let margin = { top: 10, left: 60, bottom: 40, right: 20 }
+    width = 1100 - (margin.left + margin.right),
+    height = 600 - (margin.left + margin.right);
 
 let parseYear = d3.timeParse("%Y");
 let parseMonth = d3.timeParse("%B"); 
@@ -33,11 +33,11 @@ var xAxis = d3.axisBottom(x)
   .ticks(20)
 
 var svg = d3.select(".heat-map")
-    .attr("width", width + margin*2 )
-    .attr("height", height + margin*2 )
+    .attr("width", width + (margin.left + margin.right) )
+    .attr("height", height + (margin.top + margin.bottom) )
     .attr("class", "heat-map")
   .append("g") 
-    .attr("transform", "translate(" + margin + "," + margin + ")")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
   .call(stripeTip);
 
 svg.append("g")
