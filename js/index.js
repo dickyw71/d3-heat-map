@@ -1,6 +1,6 @@
 //  setup SVG with width and height based on viewport 
-let margin = 20,
-    width = 1200 - margin*4,
+let margin = 60,
+    width = 1100 - margin*2,
     height = 600 - margin*2;
 
 let parseYear = d3.timeParse("%Y");
@@ -34,10 +34,10 @@ var xAxis = d3.axisBottom(x)
 
 var svg = d3.select(".heat-map")
     .attr("width", width + margin*2 )
-    .attr("height", height + margin*8 )
+    .attr("height", height + margin*2 )
     .attr("class", "heat-map")
   .append("g") 
-    .attr("transform", "translate(" + margin*3 + "," + margin*2 + ")")
+    .attr("transform", "translate(" + margin + "," + margin + ")")
   .call(stripeTip);
 
 svg.append("g")
@@ -76,12 +76,13 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
   let last = data.monthlyVariance[data.monthlyVariance.length-1];
   let minTemp = d3.min(myData, (d) => data.baseTemperature + d.variance );
   let maxTemp = d3.max(myData, (d) => data.baseTemperature + d.variance );
+  let years = last.year - first.year;
 
   x.domain([new Date(first.year, first.month, 1), new Date(last.year, last.month, 1)])
   y.domain([12, 1]);
   color.domain([maxTemp, minTemp]);
 
-  let stripeWidth = x.range()[1] / data.monthlyVariance.length;
+  let stripeWidth = x.range()[1] / years;
   let stripeHeight = y.range()[0] / 12;
 
   svg.append("g")
@@ -100,7 +101,7 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
     .data(myData)
   .enter().append("rect")
         .attr("class", "stripe")
-        .attr("width", stripeWidth+3)
+        .attr("width", stripeWidth)
         .attr("height", stripeHeight)
         .attr("transform", (d) => "translate("+ x(parseYear(d.year)) + ", " + ((d.month-1)*stripeHeight) + ")")
         .attr("id", (d) => d.month + "_" + d.year)
