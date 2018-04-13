@@ -14,8 +14,8 @@ let baselineTemp = 15;
 let stripeTip = d3.tip()
     .attr("class", "d3-tip")
     .html(function(d) { return "<span>" + months[d.month-1] + " </span>" + "<span> - " + d.year + "</span>"
-                            + "<br/><span>" + (baselineTemp + d.variance).toPrecision(2) + " ℃</span>"
-                            + "<br/><span>" + d.variance.toPrecision(2) + " ℃</span>"; })
+                            + "<br/><span>Baseline + variance: " + (baselineTemp + d.variance).toPrecision(2) + " ℃</span>"
+                            + "<br/><span>Variance: " + d.variance.toPrecision(2) + " ℃</span>"; })
 
 // x scale - years 
 let x = d3.scaleTime()
