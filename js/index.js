@@ -1,5 +1,5 @@
 //  setup SVG with width and height based on viewport 
-let margin = { top: 10, left: 60, bottom: 40, right: 20 }
+let margin = { top: 10, left: 90, bottom: 40, right: 20 }
     width = 1100 - (margin.left + margin.right),
     height = 600 - (margin.left + margin.right);
 
@@ -22,17 +22,15 @@ let x = d3.scaleTime()
   .range([0, width]);
 
 // y scale - months Jan-Dec
-var y = d3.scaleTime()
+let y = d3.scaleTime()
   .range([height, 0]);
 
-var color = d3.scaleSequential(d3.interpolateRainbow);
+let color = d3.scaleSequential(d3.interpolateRainbow);
 
 // Axis
-var xAxis = d3.axisBottom(x)
-  .tickSizeOuter(10)
-  .ticks(20)
+let xAxis = d3.axisBottom(x)
 
-var svg = d3.select(".heat-map")
+let svg = d3.select(".heat-map")
     .attr("width", width + (margin.left + margin.right) )
     .attr("height", height + (margin.top + margin.bottom) )
     .attr("class", "heat-map")
@@ -46,17 +44,15 @@ svg.append("g")
     .attr("class", "y label")
     .attr("transform", "translate(0, " + height/2 + ") rotate(-90)")
     .attr("y", 6)
-    .attr("dy", "-2.8em")
+    .attr("dy", "-3.8em")
     .attr("fill", "black")
     .style("text-anchor", "middle")
     .text("Month")
 
-    console.log("Height: ", height/12);
-
 svg.selectAll(".y-label")
   .data(months)
 .enter().append("text")
-  .attr("class", "y-label")
+  .attr("class", "y-label label")
   .attr("transform", (d, i) => "translate(0, " + ((height/12)*(i+1)) + ")")
   .attr("dx", "-0.5em")  
   .attr("dy", "-1.3em")
