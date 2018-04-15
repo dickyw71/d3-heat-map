@@ -17,10 +17,17 @@ p {
     font-size: 18px;
 }
 
+.y-label {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;  
+    font-size: 12px;
+}
+
 .d3-tip {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;  
-    padding: 10px;
+    font-size: 14px;
+    padding: 8px;
     border-radius: 5px;
+    border: 1px solid black;
     background-color: bisque;
     text-align: center;
 }
@@ -32,7 +39,7 @@ p {
     font-size: 10px;
     width: 100%;
     line-height: 1;
-    color: rgba(255, 228, 196, 1);
+    color: black;
     content: "\25BC";
     position: absolute;
     text-align: center;
@@ -44,7 +51,4 @@ p {
     left: 0;
 }
 
-.y-label {
-    font-size: 12px;
-}
 
