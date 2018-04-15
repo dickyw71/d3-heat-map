@@ -1,4 +1,3 @@
-//  setup SVG with width and height based on viewport 
 let margin = { top: 10, left: 90, bottom: 40, right: 20 }
     width = 1100 - (margin.left + margin.right),
     height = 600 - (margin.left + margin.right);
@@ -14,8 +13,8 @@ let baselineTemp = 15;
 let stripeTip = d3.tip()
     .attr("class", "d3-tip")
     .html(function(d) { return "<span>" + months[d.month-1] + " </span>" + "<span> - " + d.year + "</span>"
-                            + "<br/><span>Baseline + variance: " + (baselineTemp + d.variance).toPrecision(2) + " ℃</span>"
-                            + "<br/><span>Variance: " + d.variance.toPrecision(2) + " ℃</span>"; })
+                            + "<br/><span>Temp: " + (baselineTemp + d.variance).toPrecision(2) + "℃</span>"
+                            + "<br/><span>Delta: " + d.variance.toPrecision(2) + "℃</span>"; })
 
 // x scale - years 
 let x = d3.scaleTime()
@@ -25,7 +24,8 @@ let x = d3.scaleTime()
 let y = d3.scaleTime()
   .range([height, 0]);
 
-let color = d3.scaleSequential(d3.interpolateRainbow);
+// colour scale - cylindrical rainbow
+let colour = d3.scaleSequential(d3.interpolateRainbow);
 
 // Axis
 let xAxis = d3.axisBottom(x)
@@ -46,13 +46,14 @@ svg.append("g")
     .attr("y", 6)
     .attr("dy", "-3.8em")
     .attr("fill", "black")
+    .attr("font-weight", "bold")
     .style("text-anchor", "middle")
     .text("Month")
 
 svg.selectAll(".y-label")
   .data(months)
 .enter().append("text")
-  .attr("class", "y-label label")
+  .attr("class", "y-label")
   .attr("transform", (d, i) => "translate(0, " + ((height/12)*(i+1)) + ")")
   .attr("dx", "-0.5em")  
   .attr("dy", "-1.3em")
@@ -76,7 +77,7 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
 
   x.domain([new Date(first.year, first.month, 1), new Date(last.year, last.month, 1)])
   y.domain([12, 1]);
-  color.domain([maxTemp, minTemp]);
+  colour.domain([maxTemp, minTemp])
 
   let stripeWidth = x.range()[1] / years;
   let stripeHeight = y.range()[0] / 12;
@@ -88,8 +89,9 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
    .append("text")
     .attr("class", "x label")
     .attr("x", width/2)
-    .attr("y", 36)
+    .attr("y", 40)
     .attr("fill", "black")
+    .attr("font-weight", "bold")
     .style("text-anchor", "middle")
     .text("Year");
 
@@ -101,7 +103,7 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
         .attr("height", stripeHeight)
         .attr("transform", (d) => "translate("+ x(parseYear(d.year)) + ", " + ((d.month-1)*stripeHeight) + ")")
         .attr("id", (d) => d.month + "_" + d.year)
-        .style("fill", (d) =>  color(data.baseTemperature + d.variance))
+        .style("fill", (d) =>  colour(data.baseTemperature + d.variance))
     .on("mouseover", function(d, i) {
           stripeTip.show(d, svg)
        })
