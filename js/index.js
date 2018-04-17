@@ -1,4 +1,4 @@
-let margin = { top: 10, left: 90, bottom: 40, right: 20 }
+let margin = { top: 20, left: 90, bottom: 40, right: 20 }
     width = 1100 - (margin.left + margin.right),
     height = 600 - (margin.left + margin.right);
 
@@ -37,6 +37,13 @@ let svg = d3.select(".heat-map")
   .append("g") 
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
   .call(stripeTip);
+
+svg.append("text")
+  .attr("fill", "#000")
+  .attr("x", width/2)
+  .attr("text-anchor", "middle")
+  .attr("y", -6)
+  .text("Temperatures are in Celsius and reported as anomalies relative to the Jan 1951-Dec 1980 average.\nEstimated Jan 1951-Dec 1980 absolute temperature ℃: 8.66 +/- 0.07")
 
 svg.append("g")
   .attr("class", "y axis")
