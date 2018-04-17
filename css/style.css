@@ -22,6 +22,11 @@ p {
     font-size: 12px;
 }
 
+text {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;  
+    font-size: 10px;    
+}
+
 .d3-tip {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;  
     font-size: 14px;
