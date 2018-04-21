@@ -56,4 +56,7 @@ text {
     left: 0;
 }
 
+rect:hover {
+    cursor: pointer;
+}
 
