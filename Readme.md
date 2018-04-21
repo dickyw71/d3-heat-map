@@ -3,6 +3,6 @@
 I used the D3 library to visualise the [surface temperature dataset]("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/global-temperature.json").
 See it live [here](https://dickyw71.github.io/d3-heat-map/).
 
-I chose the d3.interpolateMagma sequential colour scale.
+I chose the [d3.interpolateMagma sequential colour scale](https://bl.ocks.org/d3indepth/89ced137bece23b908cf51580d5e082d).
 
   
